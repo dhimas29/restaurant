@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChefMenuController;
 use App\Http\Controllers\FoodMenuController;
 
 /*
@@ -25,13 +28,20 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('/users', [AdminController::class, 'user']);
 Route::get('/users/delete/{id}', [AdminController::class, 'delete']);
 
-Route::resource('/foodmenu', FoodMenuController::class);
+Route::resource('/admin/user', AdminUserController::class);
 
 // Route::get('/foods', [AdminController::class, 'food']);
 // Route::post('/foods/upload', [AdminController::class, 'upload']);
 
 Route::get('/redirects', [HomeController::class, 'redirects']);
 
+Route::get('/foodMenu/checkSlug', [FoodMenuController::class, 'checkSlug']);
+Route::resource('/foodMenu', FoodMenuController::class);
+
+Route::resource('/chefMenu', ChefMenuController::class)->except('show');
+
+Route::get('/category/checkSlug', [CategoryController::class, 'checkSlug']);
+Route::resource('/category', CategoryController::class)->except('show');
 
 Route::middleware([
     'auth:sanctum',

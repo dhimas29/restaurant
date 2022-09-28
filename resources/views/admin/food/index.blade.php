@@ -3,16 +3,16 @@
 @section('content')
     <div class="card">
         <div class="card-body pb-0">
-            <h4 class="card-title">Hoverable Table</h4>
-            <p class="card-description"> Add class <code>.table-hover</code>
+            <h4 class="card-title">Food Menu Table</h4>
             </p>
             <div class="table-responsive">
-                <a href="{{ url('/foodmenu/create') }}" class="btn btn-primary btn-sm">Tambah Data</a>
+                <a href="{{ url('/foodMenu/create') }}" class="btn btn-primary btn-sm">Tambah Data</a>
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>Title</th>
+                            <th>Image</th>
                             <th>Price</th>
                             <th>Description</th>
                             <th>Action</th>
@@ -23,20 +23,20 @@
                             <tr>
                                 <td> {{ ($datas->currentpage() - 1) * $datas->perpage() + $loop->index + 1 }}</td>
                                 <td>{{ $data->title }}</td>
+                                <td><img src="{{ asset('storage/' . $data->image) }}" alt=""></td>
                                 <td>{{ $data->price }}</td>
                                 <td>{{ $data->description }}</td>
                                 <td>
-                                    <a href="/foodmenu/{{ $data->id }}"
+                                    <a href="/foodMenu/{{ $data->slug }}"
                                         class="badge badge-info text-decoration-none">Show</a>
-                                    <a href="/foodmenu/{{ $data->id }}"
+                                    <a href="/foodMenu/{{ $data->slug }}/edit"
                                         class="badge badge-warning text-decoration-none">Edit</a>
-                                    <form action="/foodmenu/{{ $data->id }}" class="d-inline" method="post">
+                                    <form action="/foodMenu/{{ $data->slug }}" class="d-inline" method="post">
                                         @csrf
                                         @method('delete')
                                         <button onclick="return confirm('yakin hapus data ?')"
                                             class="badge border-0 badge-danger text-decoration-none">Delete</button>
                                     </form>
-
                                 </td>
                             </tr>
                         @endforeach

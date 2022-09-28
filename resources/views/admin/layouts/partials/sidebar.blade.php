@@ -11,31 +11,39 @@
         <li class="nav-item menu-items">
             <a class="nav-link" href="{{ url('/redirects') }}">
                 <span class="menu-icon">
-                    <i class="mdi mdi-speedometer"></i>
+                    <i class="mdi mdi-home"></i>
                 </span>
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
-        <li class="nav-item menu-items">
-            <a class="nav-link" href="{{ url('/users') }}">
+        <li class="nav-item menu-items {{ Request::is('category*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ url('/category') }}">
                 <span class="menu-icon">
-                    <i class="mdi mdi-speedometer"></i>
+                    <i class="mdi mdi-dns"></i>
+                </span>
+                <span class="menu-title">Category</span>
+            </a>
+        </li>
+        <li class="nav-item menu-items {{ Request::is('admin/user*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ url('/admin/user') }}">
+                <span class="menu-icon">
+                    <i class="mdi mdi-account-group"></i>
                 </span>
                 <span class="menu-title">Users</span>
             </a>
         </li>
-        <li class="nav-item menu-items">
-            <a class="nav-link" href="{{ url('/foodmenu') }}">
+        <li class="nav-item menu-items {{ Request::is('foodMenu*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ url('/foodMenu') }}">
                 <span class="menu-icon">
-                    <i class="mdi mdi-playlist-play"></i>
+                    <i class="mdi mdi-food"></i>
                 </span>
                 <span class="menu-title">Food Menu</span>
             </a>
         </li>
-        <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/tables/basic-table.html">
+        <li class="nav-item menu-items {{ Request::is('chefMenu*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ url('/chefMenu') }}">
                 <span class="menu-icon">
-                    <i class="mdi mdi-table-large"></i>
+                    <i class="mdi mdi-chef-hat"></i>
                 </span>
                 <span class="menu-title">Chefs</span>
             </a>
@@ -43,7 +51,7 @@
         <li class="nav-item menu-items">
             <a class="nav-link" href="pages/charts/chartjs.html">
                 <span class="menu-icon">
-                    <i class="mdi mdi-chart-bar"></i>
+                    <i class="mdi mdi-book-multiple"></i>
                 </span>
                 <span class="menu-title">Reservation</span>
             </a>

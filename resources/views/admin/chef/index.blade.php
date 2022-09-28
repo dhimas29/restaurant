@@ -3,28 +3,33 @@
 @section('content')
     <div class="card">
         <div class="card-body pb-0">
-            <h4 class="card-title">User Table</h4>
+            <h4 class="card-title">Chef Table</h4>
             </p>
             <div class="table-responsive">
+                <a href="{{ url('/chefMenu/create') }}" class="btn btn-primary btn-sm">Tambah Data</a>
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Name</th>
-                            <th>Email</th>
+                            <th>Nama</th>
+                            <th>Image</th>
+                            <th>No Telp</th>
+                            <th>Alamat</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($datas as $data)
+                        @foreach ($chef as $data)
                             <tr>
-                                <td> {{ ($datas->currentpage() - 1) * $datas->perpage() + $loop->index + 1 }}</td>
-                                <td>{{ $data->name }}</td>
-                                <td>{{ $data->email }}</td>
-                                <td><a href="/admin/user/{{ $data->id }}"
-                                        class="badge badge-info text-decoration-none">show</a></td>
+                                <td> {{ ($chef->currentpage() - 1) * $chef->perpage() + $loop->index + 1 }}</td>
+                                <td>{{ $data->nama }}</td>
+                                <td><img src="{{ asset('storage/' . $data->foto) }}" alt=""></td>
+                                <td>{{ $data->no_telp }}</td>
+                                <td>{{ $data->alamat }}</td>
                                 <td>
-                                    <form action="/admin/user/{{ $data->slug }}" class="d-inline" method="post">
+                                    <a href="/chefMenu/{{ $data->id }}/edit"
+                                        class="badge badge-warning text-decoration-none">Edit</a>
+                                    <form action="/chefMenu/{{ $data->id }}" class="d-inline" method="post">
                                         @csrf
                                         @method('delete')
                                         <button onclick="return confirm('yakin hapus data ?')"
@@ -37,7 +42,7 @@
                 </table>
                 <div class="d-flex justify-content-center mt-3">
 
-                    {{ $datas->links() }}
+                    {{ $chef->links() }}
 
                 </div>
             </div>

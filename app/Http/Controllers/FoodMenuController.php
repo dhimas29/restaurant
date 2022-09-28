@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\FoodMenu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 
 class FoodMenuController extends Controller
 {
@@ -14,8 +17,11 @@ class FoodMenuController extends Controller
      */
     public function index()
     {
-        $datas = FoodMenu::latest()->paginate(1);
-        return view('admin.food.index', compact('datas'));
+        $datas = FoodMenu::latest()->paginate(4);
+        return view('admin.food.index', [
+            'datas' => $datas,
+            'title' => 'Dashboard | Food Menu'
+        ]);
     }
 
     /**
@@ -25,7 +31,10 @@ class FoodMenuController extends Controller
      */
     public function create()
     {
-        return view('admin.food.create');
+        return view('admin.food.create', [
+            'title' => 'Dashboard | Food Menu',
+            'category' => Category::all()
+        ]);
     }
 
     /**
@@ -36,17 +45,21 @@ class FoodMenuController extends Controller
      */
     public function store(Request $request)
     {
-        $data = new FoodMenu;
-        $image = $request->image;
-        $imageName = time() . '.' . $image->getClientOriginalExtension();
-        $request->image->move('image', $imageName);
-        $data->image = $imageName;
-        $data->title = $request->title;
-        $data->price = $request->price;
-        $data->description = $request->description;
+        $validateData = $request->validate([
+            'category_id' => 'required',
+            'title' => 'required|max:255',
+            'slug' => 'required|unique:food_menus',
+            'price' => 'required',
+            'image' => 'image|file|max:1024',
+            'description' => 'required',
+        ]);
 
-        $data->save();
-        return redirect()->back();
+        if ($request->file('image')) {
+            $validateData['image'] = $request->file('image')->store('food-images');
+        }
+
+        FoodMenu::create($validateData);
+        return redirect('/foodMenu');
     }
 
     /**
@@ -57,7 +70,10 @@ class FoodMenuController extends Controller
      */
     public function show(FoodMenu $foodMenu)
     {
-        //
+        return view('admin.food.show', [
+            'title' => 'Dashboard | Food Menu',
+            'foodMenu' => $foodMenu
+        ]);
     }
 
     /**
@@ -68,7 +84,11 @@ class FoodMenuController extends Controller
      */
     public function edit(FoodMenu $foodMenu)
     {
-        //
+        return view('admin.food.edit', [
+            'foodData' => $foodMenu,
+            'category' => Category::all(),
+            'title' => 'Dashboard | Food Menu'
+        ]);
     }
 
     /**
@@ -80,7 +100,27 @@ class FoodMenuController extends Controller
      */
     public function update(Request $request, FoodMenu $foodMenu)
     {
-        //
+        $rules = [
+            'category_id' => 'required',
+            'title' => 'required|max:255',
+            'price' => 'required',
+            'image' => 'image|file|max:1024',
+            'description' => 'required',
+        ];
+        if ($request->slug != $foodMenu->slug) {
+            $rules['slug'] = 'required|unique:food_menus';
+        }
+        $validateData = $request->validate($rules);
+
+        if ($request->file('image')) {
+            if ($foodMenu->image) {
+                Storage::delete($foodMenu->image);
+            }
+            $validateData['image'] = $request->file('image')->store('food-images');
+        }
+        FoodMenu::where('id', $foodMenu->id)
+            ->update($validateData);
+        return redirect('/foodMenu');
     }
 
     /**
@@ -91,7 +131,17 @@ class FoodMenuController extends Controller
      */
     public function destroy(FoodMenu $foodMenu, $id)
     {
+        if ($foodMenu->image) {
+            Storage::delete($foodMenu->image);
+        }
         $foodMenu::destroy($id);
-        return redirect()->back();
+        return redirect('/foodMenu', [
+            'title' => 'Dashboard | Food Menu'
+        ]);
+    }
+    public function checkSlug(Request $request)
+    {
+        $slug = SlugService::createSlug(FoodMenu::class, 'slug', $request->title);
+        return response()->json(['slug' => $slug]);
     }
 }

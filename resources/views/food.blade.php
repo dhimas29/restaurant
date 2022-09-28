@@ -6,7 +6,7 @@
                     <h6>Our Menu</h6>
                     <h2>Our selection of cakes with quality taste</h2>
                 </div>
-            </div>
+            </div>\index.html
         </div>
     </div>
     <div class="menu-item-carousel">
@@ -14,7 +14,7 @@
             <div class="owl-menu-item owl-carousel">
                 @foreach ($foodMenu as $data)
                     <div class="item">
-                        <div class='card' style="background-image: url('/image/{{ $data->image }}')">
+                        <div class='card' style="background-image: url('storage/{{ $data->image }}')">
                             <div class="price">
                                 <h6>{{ $data->price }}</h6>
                             </div>

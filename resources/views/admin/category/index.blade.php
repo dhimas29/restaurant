@@ -3,28 +3,27 @@
 @section('content')
     <div class="card">
         <div class="card-body pb-0">
-            <h4 class="card-title">User Table</h4>
+            <h4 class="card-title">Category Table</h4>
             </p>
             <div class="table-responsive">
+                <a href="{{ url('/category/create') }}" class="btn btn-primary btn-sm">Tambah Data</a>
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Name</th>
-                            <th>Email</th>
+                            <th>Title</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($datas as $data)
+                        @foreach ($category as $data)
                             <tr>
-                                <td> {{ ($datas->currentpage() - 1) * $datas->perpage() + $loop->index + 1 }}</td>
-                                <td>{{ $data->name }}</td>
-                                <td>{{ $data->email }}</td>
-                                <td><a href="/admin/user/{{ $data->id }}"
-                                        class="badge badge-info text-decoration-none">show</a></td>
+                                <td> {{ ($category->currentpage() - 1) * $category->perpage() + $loop->index + 1 }}</td>
+                                <td>{{ $data->title }}</td>
                                 <td>
-                                    <form action="/admin/user/{{ $data->slug }}" class="d-inline" method="post">
+                                    <a href="/category/{{ $data->slug }}/edit"
+                                        class="badge badge-warning text-decoration-none">Edit</a>
+                                    <form action="/category/{{ $data->slug }}" class="d-inline" method="post">
                                         @csrf
                                         @method('delete')
                                         <button onclick="return confirm('yakin hapus data ?')"
@@ -37,7 +36,7 @@
                 </table>
                 <div class="d-flex justify-content-center mt-3">
 
-                    {{ $datas->links() }}
+                    {{ $category->links() }}
 
                 </div>
             </div>

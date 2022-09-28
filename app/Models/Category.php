@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FoodMenu extends Model
+class Category extends Model
 {
     use Sluggable, HasFactory;
     protected $guarded = ['id'];
@@ -25,8 +24,12 @@ class FoodMenu extends Model
     {
         return 'slug';
     }
-    public function category()
+    public function food_menus()
     {
-        return $this->belongsTo(FoodMenu::class, 'category_id');
+        return $this->hasOne(Category::class);
+    }
+    public function food_chef()
+    {
+        return $this->hasOne(Category::class);
     }
 }
